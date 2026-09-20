@@ -1,0 +1,2 @@
+# Force binary handling for compiled dependencies so autocrlf never touches them.
+*.dll binary

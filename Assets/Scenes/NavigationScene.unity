@@ -217,6 +217,7 @@ GameObject:
   - component: {fileID: 200012}
   - component: {fileID: 200013}
   - component: {fileID: 200014}
+  - component: {fileID: 200015}
   m_Layer: 0
   m_Name: AR Camera
   m_TagString: MainCamera
@@ -300,6 +301,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 816b289ef451e094f9ae174fb4cf8db0, type: 3}
   m_Name:
   m_EditorClassIdentifier:
+--- !u!114 &200015
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 200010}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eaf6557bce7c6c6cac3b4b11d9df2594, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  _cameraManager: {fileID: 200013}
+  _decodeEveryNFrames: 10
 --- !u!1 &300001
 GameObject:
   m_ObjectHideFlags: 0

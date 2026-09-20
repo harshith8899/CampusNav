@@ -1,7 +1,10 @@
 {
     "name": "CampusNav.Runtime",
     "rootNamespace": "",
-    "references": [],
+    "references": [
+        "Unity.XR.ARFoundation",
+        "Unity.XR.ARSubsystems"
+    ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
