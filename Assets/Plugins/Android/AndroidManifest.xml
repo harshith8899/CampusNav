@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Merged into the generated Gradle manifest at build time (Unity auto-merges
+  any manifest found at this path). Declares only the two permissions
+  CampusNav actually needs on Android: camera (QR scanning + AR passthrough)
+  and location (outdoor GPS navigation). No other permissions are added here
+  — everything else in the final APK manifest comes from Unity's own
+  defaults or from the ARCore XR Plugin's own manifest merge (e.g. the
+  com.google.ar.core "AR required/optional" metadata), not from this file.
+-->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+</manifest>
