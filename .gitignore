@@ -1,0 +1,30 @@
+# Unity generated folders
+/Library/
+/Temp/
+/Obj/
+/Build/
+/Builds/
+/Logs/
+/UserSettings/
+/MemoryCaptures/
+
+# IDE / tooling
+.vs/
+.vscode/*.log
+*.csproj
+*.sln
+*.user
+*.userprefs
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Unity crash/analytics
+sysinfo.txt
+crashlytics-build.properties
+
+# Auto-generated asmdef leftovers (if any local tooling adds these)
+*.pidb
+*.booproj

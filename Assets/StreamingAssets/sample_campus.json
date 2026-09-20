@@ -1,0 +1,136 @@
+{
+  "campusName": "Sample Campus",
+  "originLat": 17.385000,
+  "originLon": 78.486000,
+  "buildings": [
+    {
+      "id": "BLDG_A",
+      "name": "Block A",
+      "entranceWaypointId": "BLDG_A_ENTRANCE",
+      "footprint": [
+        { "x": 0.0,  "z": 0.0 },
+        { "x": 20.0, "z": 0.0 },
+        { "x": 20.0, "z": 15.0 },
+        { "x": 0.0,  "z": 15.0 }
+      ],
+      "height": 12.0,
+      "floors": [
+        {
+          "id": "BLDG_A_F0",
+          "level": 0,
+          "name": "Ground Floor",
+          "elevationMeters": 0.0,
+          "waypoints": [
+            {
+              "id": "BLDG_A_ENTRANCE",
+              "x": 10.0, "z": 0.5,
+              "hasGps": false, "lat": 0, "lon": 0,
+              "isQrAnchor": true,
+              "qrCodeId": "QR_BLDGA_ENTRANCE",
+              "roomName": "Block A Entrance",
+              "anchorHeadingDegrees": 0.0
+            },
+            {
+              "id": "BLDG_A_F0_HALL",
+              "x": 10.0, "z": 6.0,
+              "hasGps": false, "lat": 0, "lon": 0,
+              "isQrAnchor": false,
+              "qrCodeId": "",
+              "roomName": "",
+              "anchorHeadingDegrees": 0.0
+            },
+            {
+              "id": "BLDG_A_F0_ROOM101",
+              "x": 4.0, "z": 10.0,
+              "hasGps": false, "lat": 0, "lon": 0,
+              "isQrAnchor": false,
+              "qrCodeId": "",
+              "roomName": "Room 101",
+              "anchorHeadingDegrees": 0.0
+            },
+            {
+              "id": "BLDG_A_F0_ELEV",
+              "x": 16.0, "z": 6.0,
+              "hasGps": false, "lat": 0, "lon": 0,
+              "isQrAnchor": true,
+              "qrCodeId": "QR_BLDGA_F0_ELEV",
+              "roomName": "",
+              "anchorHeadingDegrees": 90.0
+            }
+          ],
+          "edges": [
+            { "fromId": "BLDG_A_ENTRANCE",  "toId": "BLDG_A_F0_HALL",  "type": 0, "costOverride": 0, "bidirectional": true },
+            { "fromId": "BLDG_A_F0_HALL",   "toId": "BLDG_A_F0_ROOM101", "type": 0, "costOverride": 0, "bidirectional": true },
+            { "fromId": "BLDG_A_F0_HALL",   "toId": "BLDG_A_F0_ELEV", "type": 0, "costOverride": 0, "bidirectional": true }
+          ]
+        },
+        {
+          "id": "BLDG_A_F1",
+          "level": 1,
+          "name": "1st Floor",
+          "elevationMeters": 4.0,
+          "waypoints": [
+            {
+              "id": "BLDG_A_F1_ELEV",
+              "x": 16.0, "z": 6.0,
+              "hasGps": false, "lat": 0, "lon": 0,
+              "isQrAnchor": true,
+              "qrCodeId": "QR_BLDGA_F1_ELEV",
+              "roomName": "",
+              "anchorHeadingDegrees": 90.0
+            },
+            {
+              "id": "BLDG_A_F1_HALL",
+              "x": 10.0, "z": 6.0,
+              "hasGps": false, "lat": 0, "lon": 0,
+              "isQrAnchor": false,
+              "qrCodeId": "",
+              "roomName": "",
+              "anchorHeadingDegrees": 0.0
+            },
+            {
+              "id": "BLDG_A_F1_ROOM201",
+              "x": 4.0, "z": 2.0,
+              "hasGps": false, "lat": 0, "lon": 0,
+              "isQrAnchor": false,
+              "qrCodeId": "",
+              "roomName": "Room 201",
+              "anchorHeadingDegrees": 0.0
+            }
+          ],
+          "edges": [
+            { "fromId": "BLDG_A_F1_ELEV", "toId": "BLDG_A_F1_HALL", "type": 0, "costOverride": 0, "bidirectional": true },
+            { "fromId": "BLDG_A_F1_HALL", "toId": "BLDG_A_F1_ROOM201", "type": 0, "costOverride": 0, "bidirectional": true }
+          ]
+        }
+      ],
+      "crossFloorEdges": [
+        { "fromId": "BLDG_A_F0_ELEV", "toId": "BLDG_A_F1_ELEV", "type": 2, "costOverride": 8, "bidirectional": true }
+      ]
+    }
+  ],
+  "outdoorWaypoints": [
+    {
+      "id": "OUT_MAIN_GATE",
+      "x": 10.0, "z": -60.0,
+      "hasGps": true, "lat": 17.385500, "lon": 78.486000,
+      "isQrAnchor": false,
+      "qrCodeId": "",
+      "roomName": "Main Gate",
+      "anchorHeadingDegrees": 0.0
+    },
+    {
+      "id": "OUT_PATH_JUNCTION1",
+      "x": 10.0, "z": -20.0,
+      "hasGps": true, "lat": 17.385180, "lon": 78.486000,
+      "isQrAnchor": false,
+      "qrCodeId": "",
+      "roomName": "",
+      "anchorHeadingDegrees": 0.0
+    }
+  ],
+  "outdoorEdges": [
+    { "fromId": "OUT_MAIN_GATE", "toId": "OUT_PATH_JUNCTION1", "type": 3, "costOverride": 0, "bidirectional": true },
+    { "fromId": "OUT_PATH_JUNCTION1", "toId": "BLDG_A_ENTRANCE", "type": 4, "costOverride": 0, "bidirectional": true }
+  ]
+}
