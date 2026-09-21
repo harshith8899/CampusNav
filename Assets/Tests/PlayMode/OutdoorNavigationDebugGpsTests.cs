@@ -1,3 +1,4 @@
+#if UNITY_EDITOR
 using System.Reflection;
 using NUnit.Framework;
 using UnityEngine;
@@ -9,10 +10,12 @@ namespace CampusNav.PlayModeTests
     /// Exercises outdoor GPS navigation end-to-end using
     /// GpsCompassNavigator's Editor-only debug override
     /// (GpsCompassNavigator.DebugApplyOverride), since real Input.location
-    /// readings aren't available in the Editor. This is why this assembly
-    /// is restricted to the Editor platform (see CampusNav.PlayModeTests.asmdef)
-    /// — it calls an UNITY_EDITOR-only API that doesn't exist in a device
-    /// build.
+    /// readings aren't available in the Editor. Wrapped in UNITY_EDITOR, like
+    /// the API it exercises, so this assembly can stay a normal
+    /// (non-Editor-restricted) PlayMode test assembly — required for Unity's
+    /// Test Runner to categorize it as PlayMode at all — while still
+    /// compiling safely if it were ever pulled into an on-device Play Mode
+    /// player test build, where DebugApplyOverride doesn't exist.
     /// </summary>
     public class OutdoorNavigationDebugGpsTests
     {
@@ -76,3 +79,4 @@ namespace CampusNav.PlayModeTests
         }
     }
 }
+#endif
