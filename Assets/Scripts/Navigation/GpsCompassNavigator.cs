@@ -33,6 +33,16 @@ namespace CampusNav.Navigation
         public double CurrentLat { get; private set; }
         public double CurrentLon { get; private set; }
 
+        /// <summary>Horizontal accuracy of the last fix, in meters (lower is better).</summary>
+        public float CurrentAccuracyMeters { get; private set; }
+
+        /// <summary>
+        /// True once the location service has definitively failed to produce
+        /// a usable fix (disabled by the user/OS, or start timed out). Used
+        /// to drive the "weak/no GPS signal" banner.
+        /// </summary>
+        public bool ServiceFailedToStart { get; private set; }
+
         /// <summary>Raised every time a new GPS fix or compass heading arrives.</summary>
         public event Action OnLocationUpdated;
 
@@ -41,6 +51,32 @@ namespace CampusNav.Navigation
             _originLat = originLat;
             _originLon = originLon;
         }
+
+#if UNITY_EDITOR
+        // Editor-only escape hatch: Input.location/Input.compass don't
+        // produce real readings in the Editor, so Play Mode testing and
+        // manual debugging need a way to fake a fix. Driven by
+        // GpsDebugOverride (also UNITY_EDITOR-gated) or directly from a
+        // test. Compiled out of every non-Editor build entirely — this
+        // method does not exist in a device build, regardless of any
+        // runtime flag, so it can never be invoked there.
+        private bool _debugOverrideActive;
+
+        public void DebugApplyOverride(Vector2 localXZ, float headingDegrees, float accuracyMeters)
+        {
+            _debugOverrideActive = true;
+            CurrentLocalPosition = localXZ;
+            CurrentHeadingDegrees = headingDegrees;
+            CurrentAccuracyMeters = accuracyMeters;
+            IsReady = true;
+            OnLocationUpdated?.Invoke();
+        }
+
+        public void DebugClearOverride()
+        {
+            _debugOverrideActive = false;
+        }
+#endif
 
         private void OnEnable()
         {
@@ -58,6 +94,7 @@ namespace CampusNav.Navigation
             if (!Input.location.isEnabledByUser)
             {
                 Debug.LogWarning("CampusNav: location services are disabled by the user/OS. Outdoor GPS navigation will not work until enabled in device settings.");
+                ServiceFailedToStart = true;
                 yield break;
             }
 
@@ -74,6 +111,7 @@ namespace CampusNav.Navigation
             if (Input.location.status != LocationServiceStatus.Running)
             {
                 Debug.LogWarning($"CampusNav: location service failed to start (status: {Input.location.status}).");
+                ServiceFailedToStart = true;
                 yield break;
             }
 
@@ -86,11 +124,21 @@ namespace CampusNav.Navigation
             var wait = new WaitForSeconds(1f);
             while (true)
             {
+#if UNITY_EDITOR
+                // A debug override is driving readings instead — don't let a
+                // real (or Editor-simulated) fix clobber it.
+                if (_debugOverrideActive)
+                {
+                    yield return wait;
+                    continue;
+                }
+#endif
                 if (Input.location.status == LocationServiceStatus.Running)
                 {
                     var data = Input.location.lastData;
                     CurrentLat = data.latitude;
                     CurrentLon = data.longitude;
+                    CurrentAccuracyMeters = data.horizontalAccuracy;
                     CurrentLocalPosition = GeoConverter.LatLonToLocal(CurrentLat, CurrentLon, _originLat, _originLon);
                     CurrentHeadingDegrees = Input.compass.trueHeading;
 

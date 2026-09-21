@@ -27,6 +27,12 @@ namespace CampusNav.Navigation
         private bool _hasTarget;
         private float _currentDisplayedAngle;
 
+        /// <summary>True once SetTarget has been called and ClearTarget hasn't undone it.</summary>
+        public bool HasTarget => _hasTarget;
+
+        /// <summary>The local XZ position the arrow is currently pointing toward.</summary>
+        public Vector2 TargetLocalPosition => _targetLocalPosition;
+
         /// <summary>Call this whenever the current path's next waypoint changes.</summary>
         public void SetTarget(Vector2 targetLocalXZ)
         {
