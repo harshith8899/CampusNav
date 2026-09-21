@@ -71,6 +71,19 @@ namespace CampusNav.PlayModeTests
             Assert.AreEqual(expected, _outdoorArrow.TargetLocalPosition);
         }
 
+        [Test]
+        public void DebugApplyOverride_WhenRealLocationServiceUnavailable_StillMakesIsReadyTrue()
+        {
+            // SetUp already let the real location service attempt run first
+            // (it fails on this desktop, with no GPS hardware — exactly the
+            // "location services are disabled by the user/OS" case) and only
+            // then applied the debug override. IsReady must still end up
+            // true, driven purely by the faked reading, or nothing gated on
+            // it (OutdoorArrowUI included) would ever respond in the Editor.
+            Assert.IsTrue(_gpsNavigator.ServiceFailedToStart, "Expected the real location service to have failed to start in this Editor environment.");
+            Assert.IsTrue(_gpsNavigator.IsReady, "IsReady should be true from the debug override even though the real GPS service failed to start.");
+        }
+
         private static void SetPrivateField(object target, string fieldName, object value)
         {
             var field = target.GetType().GetField(fieldName, BindingFlags.Instance | BindingFlags.NonPublic);

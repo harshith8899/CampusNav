@@ -27,7 +27,26 @@ namespace CampusNav.Navigation
         [SerializeField] private float _updateDistanceMeters = 1f;
         [SerializeField] private float _startTimeoutSeconds = 20f;
 
-        public bool IsReady { get; private set; }
+        private bool _isReady;
+
+        /// <summary>
+        /// True once a usable fix is available: either a real GPS fix, or —
+        /// in the Editor only — a debug override. In a non-Editor build this
+        /// reflects only the real location service; the debug bypass below
+        /// is compiled out entirely and doesn't exist there.
+        /// </summary>
+        public bool IsReady
+        {
+            get
+            {
+#if UNITY_EDITOR
+                return _isReady || _debugOverrideActive;
+#else
+                return _isReady;
+#endif
+            }
+        }
+
         public Vector2 CurrentLocalPosition { get; private set; } // (x, z) meters
         public float CurrentHeadingDegrees { get; private set; }  // 0 = north, clockwise
         public double CurrentLat { get; private set; }
@@ -58,17 +77,22 @@ namespace CampusNav.Navigation
         // manual debugging need a way to fake a fix. Driven by
         // GpsDebugOverride (also UNITY_EDITOR-gated) or directly from a
         // test. Compiled out of every non-Editor build entirely — this
-        // method does not exist in a device build, regardless of any
-        // runtime flag, so it can never be invoked there.
+        // method, and the IsReady bypass above, do not exist in a device
+        // build, regardless of any runtime flag, so neither can ever run
+        // there.
         private bool _debugOverrideActive;
 
         public void DebugApplyOverride(Vector2 localXZ, float headingDegrees, float accuracyMeters)
         {
+            // Setting this alone already makes IsReady true (see the getter
+            // above) — deliberately independent of whether the real location
+            // service ever started, so a desktop Editor run with no GPS
+            // hardware still drives the whole outdoor nav pipeline off the
+            // faked reading.
             _debugOverrideActive = true;
             CurrentLocalPosition = localXZ;
             CurrentHeadingDegrees = headingDegrees;
             CurrentAccuracyMeters = accuracyMeters;
-            IsReady = true;
             OnLocationUpdated?.Invoke();
         }
 
@@ -115,7 +139,7 @@ namespace CampusNav.Navigation
                 yield break;
             }
 
-            IsReady = true;
+            _isReady = true;
             StartCoroutine(PollLocationRoutine());
         }
 
